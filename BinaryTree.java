@@ -10,11 +10,12 @@ public class BinaryTree {
 
     /**
      * Método privado para insertar un nodo en el árbol.
-     * @param node El nodo actual en el que se está considerando la inserción.
+     * 
+     * @param node  El nodo actual en el que se está considerando la inserción.
      * @param value La asociación (clave-valor) a insertar en el árbol.
      * @return El nodo resultante después de la inserción.
      */
-     private Node insert(Node node, Association<String, String> value) {
+    public Node insert(Node node, Association<String, String> value) {
         // Si el árbol está vacío, crea un nuevo nodo y devuelve
         if (node == null) {
             return new Node(value);
@@ -31,12 +32,13 @@ public class BinaryTree {
         else if (comparacion > 0) {
             node.right = insert(node.right, value);
         }
-        
+
         return node;
     }
 
     /**
      * Método público para insertar un nuevo nodo en el árbol.
+     * 
      * @param value La asociación (clave-valor) a insertar en el árbol.
      */
     public void insert(Association<String, String> value) {
@@ -44,21 +46,33 @@ public class BinaryTree {
     }
 
     /**
-     * Método privado para realizar un recorrido en orden del árbol (in-order traversal).
-     * @param node El nodo actual que se está considerando durante el recorrido.
+     * Método público para buscar una asociación en el árbol a partir de una clave.
+     * 
+     * @param key La clave de la asociación a buscar.
+     * @return La asociación correspondiente a la clave, o null si no se encuentra.
      */
-    private void inOrderTraversal(Node node) {
-        if (node != null) {
-            inOrderTraversal(node.left);
-            System.out.println(node.value.getKey() + ": " + node.value.getValue());
-            inOrderTraversal(node.right);
-        }
+    public Association<String, String> search(String key) {
+        return search(root, key);
     }
 
     /**
-     * Método público para realizar un recorrido en orden del árbol.
+     * Método privado para buscar una asociación en un nodo y sus descendientes a partir de una clave.
+     * 
+     * @param node El nodo actual en el que se está realizando la búsqueda.
+     * @param key  La clave de la asociación a buscar.
+     * @return La asociación correspondiente a la clave, o null si no se encuentra.
      */
-    public void inOrderTraversal() {
-        inOrderTraversal(root);
-    } 
-}
+    private Association<String, String> search(Node node, String key) {
+        if (node == null) return null;
+            // Buscar en el subárbol izquierdo primero
+            Association<String, String> leftResult = search(node.left, key);
+            if (leftResult != null) {
+                return leftResult;
+            }
+            if (key.compareTo(node.value.getKey()) == 0) {
+                return node.value;
+            }
+            // Busca en el subárbol derecho
+            return search(node.right, key);
+        }
+    }
